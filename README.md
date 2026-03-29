@@ -50,4 +50,4 @@ The skills accept a PR URL or `owner/repo#number`. If a PR was referenced earlie
 
 ## Related
 
-These skills are described in [I Stopped Reading Diffs. Here's What I Review Instead.](link)
+These skills are described in [I Stopped Reading Diffs. Here's What I Review Instead.](https://gjoranv.hashnode.dev/i-stopped-reading-diffs-here-s-what-i-review-instead)
