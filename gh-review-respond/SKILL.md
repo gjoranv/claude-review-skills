@@ -4,7 +4,7 @@ description: Read review comments on a GitHub PR, respond to them, fix code issu
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
-Handle review comments on a GitHub PR. $ARGUMENTS should be a PR URL or `owner/repo#number`. If no argument is given, use the PR referenced earlier in this conversation. If no PR can be determined, ask the user.
+Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. Second argument (if present) is context: a GitHub issue URL or reference (with or without `--context` prefix). If no PR is given, use the PR referenced earlier in this conversation. If context is provided, use it to better judge whether reviewer comments are relevant to the overall goal.
 
 1. **Read all comments** on the PR from all sources, grouped by file and conversation thread:
    - Review comments: `gh api repos/OWNER/REPO/pulls/NUMBER/comments` (inline comments on specific lines, both from reviews and standalone)

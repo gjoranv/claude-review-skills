@@ -4,7 +4,7 @@ description: Review a GitHub PR as a reviewer. Use when the user asks to "review
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-Review a GitHub PR as a code reviewer. $ARGUMENTS should be a PR URL or `owner/repo#number`. If no argument is given, check if the current branch has an open PR and use that. If no PR can be determined, ask the user.
+Review a GitHub PR as a code reviewer. $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. Second argument (if present) is context: a GitHub issue URL or reference (with or without `--context` prefix). If no PR is given, check if the current branch has an open PR. If context is provided, use it to understand the overall goal and evaluate whether the PR achieves it.
 
 ## Review criteria
 
