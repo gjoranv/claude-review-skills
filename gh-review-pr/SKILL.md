@@ -1,6 +1,7 @@
 ---
 name: gh-review-pr
 description: Review a GitHub PR as a reviewer. Use when the user asks to "review a PR", "review this pull request", or "give feedback on this PR".
+argument-hint: "[PR-url] [context-issue]"
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
@@ -8,10 +9,12 @@ Review a GitHub PR as a code reviewer. $ARGUMENTS: first argument is a PR URL or
 
 ## Review criteria
 
-When reviewing code, check for:
+Think as a software architect first: before looking at individual lines, evaluate the overall design. Is this the right abstraction? Are the boundaries in the right place? Is the approach the simplest that solves the problem? What will be hard to change later?
+
+Then check for:
 - **Bugs**: Logic errors, off-by-one, null/undefined handling, race conditions
 - **Security**: Injection, hardcoded secrets, missing input validation
-- **Design**: Does the approach make sense? Are there simpler alternatives?
+- **Design**: Does the approach make sense? Are there simpler alternatives? Flag unnecessary abstraction or indirection.
 - **Consistency**: Does it follow existing patterns and conventions in the codebase?
 - **Edge cases**: Are boundary conditions handled?
 - **Tests**: Are changes adequately tested? Are there missing test cases?
@@ -28,6 +31,7 @@ When reviewing code, check for:
    - **Should fix**: Design concerns, missing tests, inconsistencies
    - **Nit**: Style, naming, minor suggestions
    - **Praise**: Call out things that are well done
+   - **Manual review recommended**: Flag files with security-sensitive changes (auth, crypto, access control, secrets, data handling) or high-impact logic changes, and tell the user to review the diff themselves.
 6. **Ask the user** which comments to post and choose a review action:
    - Only offer "Request changes" if someone else has already approved the PR (check with `gh pr view --json reviews`). Otherwise choose between "Approve" and "Comment".
 7. **Submit the review** (skip if user is the author) using a two-step pending review pattern. Never post comments individually.

@@ -1,6 +1,7 @@
 ---
 name: gh-review-cross-pr
 description: Review multiple related PRs across repos for consistency. Use when the user asks to "review these PRs together", "cross-review PRs", or "check consistency across PRs".
+argument-hint: "[PR1] [PR2] [--context issue]"
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
@@ -28,6 +29,7 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
 6. **Present findings** to the user:
    - **Cross-repo issues**: Naming mismatches, contract violations, missing changes, deployment ordering
    - **Per-PR issues**: Grouped by severity (must fix, should fix, nit, praise)
+   - **Manual review recommended**: Flag files with security-sensitive changes (auth, crypto, access control, secrets, data handling) or high-impact logic changes, and tell the user to review the diff themselves.
 7. **Ask the user** which comments to post and on which PRs. Follow the same review action rules as `gh-review-pr` (only offer "Request changes" if someone else has approved).
 
 Rules:

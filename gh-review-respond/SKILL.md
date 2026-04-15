@@ -1,14 +1,16 @@
 ---
 name: gh-review-respond
 description: Read review comments on a GitHub PR, respond to them, fix code issues, and resolve conversations. Use when the user asks to "handle PR review comments", "fix review feedback", or "respond to PR reviews".
+argument-hint: "[PR-url] [context-issue]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
 Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. Second argument (if present) is context: a GitHub issue URL or reference (with or without `--context` prefix). If no PR is given, use the PR referenced earlier in this conversation. If context is provided, use it to better judge whether reviewer comments are relevant to the overall goal.
 
 1. **Read all comments** on the PR from all sources, grouped by file and conversation thread:
-   - Review comments: `gh api repos/OWNER/REPO/pulls/NUMBER/comments` (inline comments on specific lines, both from reviews and standalone)
-   - PR-level comments: `gh api repos/OWNER/REPO/issues/NUMBER/comments` (general comments not attached to code lines)
+   - Inline review comments: `gh api repos/OWNER/REPO/pulls/NUMBER/comments` (comments on specific lines of code)
+   - Review-level comments: `gh api repos/OWNER/REPO/pulls/NUMBER/reviews` (the body text submitted with each review, e.g. approval or request-changes summary)
+   - PR-level comments: `gh api repos/OWNER/REPO/issues/NUMBER/comments` (general comments not attached to code or reviews)
    Filter out already-resolved threads and only focus on unresolved comments. If there are no unresolved comments, tell the user and stop.
 2. **Present a summary** of unresolved comments to the user: list each comment with the reviewer, file, line, and the feedback given.
 3. **Categorize each comment**:
@@ -38,6 +40,7 @@ Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or
    ```
    Do not skip this step — every comment that has been replied to must be resolved.
 8. **Stage and commit** the fixes:
+   - If the PR is already approved, STOP and ask the user before committing. New commits invalidate the approval and require re-review.
    - **Bot reviewers** (e.g., Copilot): squash fixes into existing commits using `git commit --fixup` and `git rebase --autosquash`.
    - **Human reviewers**: ALWAYS create a NEW commit. NEVER squash, amend, fixup, or rebase for human reviews. The reviewer needs to see what changed.
    Tell the user to push when ready.

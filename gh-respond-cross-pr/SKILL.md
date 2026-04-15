@@ -1,6 +1,7 @@
 ---
 name: gh-respond-cross-pr
 description: Respond to review comments across multiple related PRs. Use when the user asks to "handle review comments across PRs", "respond to cross-PR reviews", or "fix feedback on all PRs".
+argument-hint: "[PR1] [PR2] [--context issue]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
@@ -13,7 +14,10 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
 
 ## Steps
 
-1. **Read all unresolved comments** across all PRs, from both review and inline comment endpoints.
+1. **Read all unresolved comments** across all PRs from all sources:
+   - Inline review comments: `gh api repos/OWNER/REPO/pulls/NUMBER/comments`
+   - Review-level comments: `gh api repos/OWNER/REPO/pulls/NUMBER/reviews` (body text submitted with each review)
+   - PR-level comments: `gh api repos/OWNER/REPO/issues/NUMBER/comments`
 2. **Identify cross-PR context**: Understand how the PRs relate. A comment on one PR may be best addressed by a change in another PR.
 3. **Filter bot noise**: Bot reviewers (e.g. Copilot) review each PR in isolation and may flag things that only make sense in the context of the full change set. Identify and flag these:
    - Missing imports/definitions that exist in a sibling PR
@@ -38,6 +42,7 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
    - For bot noise: reply with a brief explanation (e.g. "This is defined in the sibling PR org/backend#112").
 9. **Resolve all addressed conversations** in a single batched GraphQL mutation per PR.
 10. **Stage and commit** fixes in each repo:
+    - If a PR is already approved, STOP and ask the user before committing or modifying commits. New or modified commits invalidate the approval and require re-review.
     - **Bot reviewers**: squash into existing commits with `git commit --fixup` and `git rebase --autosquash`.
     - **Human reviewers**: ALWAYS create a NEW commit. NEVER squash for human reviews.
     Tell the user to push each repo when ready.
