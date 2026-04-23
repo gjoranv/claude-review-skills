@@ -42,6 +42,13 @@ Before starting the review, check for a `reviewer-profile.md` file in the same d
 
    Two-step flow: (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
 
+   **Footer**: When submitting a Body to the review, always append the following footer at the end of it (separated by `---`):
+
+   ```
+   ---
+   *AI-assisted review · Findings and comments are verified and approved by a human reviewer before submission*
+   ```
+
    Key syntax pitfalls:
    - Use `-f` for strings, `-F` for numbers (line numbers)
    - Always single-quote `comments[][]` parameters
