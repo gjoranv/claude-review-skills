@@ -19,6 +19,10 @@ Then check for:
 - **Edge cases**: Are boundary conditions handled?
 - **Tests**: Are changes adequately tested? Are there missing test cases?
 
+## Reviewer persona
+
+Before starting the review, check for a `reviewer-profile.md` file in the same directory as this skill. If found, read it and adopt its tone, focus areas, and signature moves throughout the review. All review comments and the final review body MUST reflect this persona.
+
 ## Core steps
 
 1. **Read the PR**: Fetch the PR description, commits, and full diff. Check if the current user is the PR author (`gh pr view --json author`).
