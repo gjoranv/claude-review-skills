@@ -12,8 +12,10 @@ Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or
    - **Review-level comments**: `gh api repos/OWNER/REPO/pulls/NUMBER/reviews` (body text submitted with each review, e.g. approval or request-changes summary). No resolution state — include all that contain substantive feedback not already addressed.
    - **PR-level comments**: `gh api repos/OWNER/REPO/issues/NUMBER/comments` (general comments not attached to code or reviews). **No resolution state** — these are plain issue comments. Include ALL that the user has not already responded to. A PR-level comment must never be silently dropped because it "isn't resolvable".
 
+   **Track comment IDs carefully.** Multiple reviewers (human and bot) often comment on the same file. Each inline comment has a unique numeric `id`. Record `(id, reviewer, file, line, body)` for every comment. When replying later, use the exact `id` from the original comment as `in_reply_to`. Do NOT look up comments by file/line — that matches the wrong thread when multiple reviewers commented on the same file.
+
    If all three sources return nothing actionable, tell the user and stop. Otherwise proceed even if only PR-level comments are unanswered.
-2. **Present a summary** grouped by source (inline / review-level / PR-level), with reviewer, file+line for inline, and the feedback. Never omit a source from the summary — if a source has nothing, say so explicitly ("no PR-level comments to address").
+2. **Present a summary** grouped by source (inline / review-level / PR-level), with reviewer, comment `id`, file+line for inline, and the feedback. Never omit a source from the summary — if a source has nothing, say so explicitly ("no PR-level comments to address").
 3. **Categorize each comment**:
    - **Fix needed**: The reviewer pointed out a real issue — propose a code fix.
    - **Discussion**: The reviewer asked a question or raised a point that needs the user's input.
@@ -35,7 +37,7 @@ Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or
      -F in_reply_to=COMMENT_ID \
      -f body="Reply text"
    ```
-   Use `-F` for numeric `in_reply_to`.
+   Use `-F` for numeric `in_reply_to`. The `COMMENT_ID` MUST be the exact `id` from the comment you are replying to (recorded in step 1). Do NOT reuse IDs from other threads on the same file — a Copilot comment on line 42 has a different ID than a human comment on line 42.
 
    **PR-level comments** (no reply mechanism — post a new issue comment that references the original):
    ```
