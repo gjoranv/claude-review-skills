@@ -22,7 +22,7 @@ Then check for:
 
 ## Reviewer persona
 
-Before starting the review, check for a `reviewer-profile.md` file in the same directory as this skill. If found, read it and adopt its tone, focus areas, and signature moves throughout the review. All review comments and the final review body MUST reflect this persona.
+Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-profile.md`. If it exists, read it and adopt its tone, focus areas, and signature moves throughout the review. All review comments and the final review body MUST reflect this persona.
 
 ## Core steps
 
