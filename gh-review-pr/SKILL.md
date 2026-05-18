@@ -43,6 +43,8 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
    Every finding: one line, cite `file_path:line_number`, state the issue. No restating the code. Skip empty sections entirely.
 4. **Ask** which findings to post and the action (approve/comment/request-changes). Then submit via the two-step pending review pattern. Never post comments individually.
 
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`.
+
    Two-step submission: (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
 
    Syntax pitfalls: use `-f` for strings and `-F` for numbers; single-quote `comments[][]` params; use `side=RIGHT` for added/modified lines, `LEFT` for deleted; for code suggestions, triple backticks with `suggestion` in the comment body.
