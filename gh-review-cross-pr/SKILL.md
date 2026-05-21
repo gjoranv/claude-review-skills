@@ -28,9 +28,15 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
 5. **Review each PR individually** for bugs, security, and design using the same criteria as `gh-review-pr`.
 6. **Present findings** to the user:
    - **Cross-repo issues**: Naming mismatches, contract violations, missing changes, deployment ordering
-   - **Per-PR issues**: Grouped by severity (must fix, should fix, nit, praise)
+   - **Per-PR issues**: Grouped by severity (must fix, should fix, nit). Praise only for extraordinary work; skip for merely correct code.
    - **Manual review recommended**: Flag files with security-sensitive changes (auth, crypto, access control, secrets, data handling) or high-impact logic changes, and tell the user to review the diff themselves.
-7. **Ask the user** which comments to post and on which PRs. Follow the same review action rules as `gh-review-pr` (only offer "Request changes" if someone else has approved).
+7. **Self-review check**: If the current user is the author of all PRs, skip this step entirely. Present findings in conversation only; do not post comments or reviews.
+
+   **Walk through each comment** with the user before posting. For each finding:
+   - Show the proposed comment text and which PR it targets
+   - Let the user approve, edit, or drop it
+
+   After all comments are reviewed, show the proposed **review body** for each PR. Let the user edit them. Then confirm the action per PR (approve/comment/request-changes) and submit.
 
 Rules:
 - Be constructive and respectful in all comments.

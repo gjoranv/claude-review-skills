@@ -38,14 +38,19 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
    - **Nit**: style, naming
    - **Risks**: blind spots the author may not have flagged
    - **Manual review**: files the user should review themselves (security-sensitive: auth/crypto/access control/secrets; or high-impact logic)
-   - **Praise**: only if genuinely warranted — skip the section if not
+   - **Praise**: only for extraordinary work — a clever solution, an unusually clean abstraction, or something that teaches the reviewer. Skip for code that's merely correct.
 
    Every finding: one line, cite `file_path:line_number`, state the issue. No restating the code. Skip empty sections entirely.
-4. **Ask** which findings to post and the action (approve/comment/request-changes). Then submit via the two-step pending review pattern. Never post comments individually.
+4. **Walk through each comment** with the user before posting. For each finding:
+   - Show the proposed comment text
+   - Let the user approve, edit, or drop it
+   - Apply edits before moving on
+
+   After all inline comments are reviewed, show the proposed **review body** (the summary that accompanies the review action). Let the user edit it too. Then confirm the action (approve/comment/request-changes) and submit.
 
    **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`.
 
-   Two-step submission: (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
+   Submit via the two-step pending review pattern. Never post comments individually. (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
 
    Syntax pitfalls: use `-f` for strings and `-F` for numbers; single-quote `comments[][]` params; use `side=RIGHT` for added/modified lines, `LEFT` for deleted; for code suggestions, triple backticks with `suggestion` in the comment body.
 
