@@ -15,7 +15,7 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
 ## Steps
 
 1. **Read context** (if provided): Fetch the issue to understand the overall goal and expected data flow.
-2. **Read all PRs** in parallel: Fetch descriptions, commits, and full diffs for each PR.
+2. **Read all PRs** in parallel: Fetch descriptions, commits, full diffs, and authors (`gh pr view --json author`) for each PR.
 3. **Map the interfaces**: Identify how the PRs connect:
    - Shared field/variable names, API endpoints, config keys
    - Data that flows from one repo to another (e.g. a Terraform output consumed by application code)
@@ -37,6 +37,8 @@ The `--context` argument is optional and can be a GitHub issue URL or reference.
    - Let the user approve, edit, or drop it
 
    After all comments are reviewed, show the proposed **review body** for each PR. Let the user edit them. Then confirm the action per PR (approve/comment/request-changes) and submit.
+
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to each review body, separated by `---`. Replace `{{model}}` with the model name powering this session (e.g. "Claude Opus 4.6").
 
 Rules:
 - Be constructive and respectful in all comments.
