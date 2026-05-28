@@ -48,7 +48,7 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
 
    After all inline comments are reviewed, show the proposed **review body** (the summary that accompanies the review action). Let the user edit it too. Then confirm the action (approve/comment/request-changes) and submit.
 
-   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`.
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model name powering this session (e.g. "Claude Opus 4.6").
 
    Submit via the two-step pending review pattern. Never post comments individually. (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
 
