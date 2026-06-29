@@ -28,12 +28,12 @@ Copy the skill directories into your Claude Code skills folder:
 cp -r gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code ~/.claude/skills/
 ```
 
-Or clone this repo and symlink:
+Or clone and symlink (recommended — picks up new skills on `git pull`):
 
 ```bash
 git clone https://github.com/gjoranv/claude-review-skills ~/git/claude-review-skills
-for skill in gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code; do
-  ln -s ~/git/claude-review-skills/$skill ~/.claude/skills/$skill
+for d in ~/git/claude-review-skills/*/SKILL.md; do
+  ln -sfn "$(dirname "$d")" ~/.claude/skills/
 done
 ```
 
