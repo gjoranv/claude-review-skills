@@ -63,5 +63,6 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
 Rules:
 - Be constructive and respectful in all comments.
 - Do not nitpick excessively. Focus on what matters.
+- No low-value PR-level comments ("Clean setup.", "Looks good overall.", "Nice work."). Either say something substantive or say nothing.
 - If there are no issues, say so and recommend approval.
 - Never approve or request changes without the user's explicit confirmation.

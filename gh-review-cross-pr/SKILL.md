@@ -12,6 +12,10 @@ Example: `/gh-review-cross-pr org/frontend#45 org/backend#112 --context org/plan
 
 The `--context` argument is optional and can be a GitHub issue URL or reference. If provided, use it to understand the overall goal and verify the PRs implement it correctly.
 
+## Reviewer persona
+
+Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-profile.md`. If it exists, read it and adopt its tone, focus areas, and signature moves throughout the review.
+
 ## Steps
 
 1. **Read context** (if provided): Fetch the issue to understand the overall goal and expected data flow.
