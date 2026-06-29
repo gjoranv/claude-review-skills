@@ -49,6 +49,12 @@ done
 
 The skills accept PR URLs or `owner/repo#number`. If a PR was referenced earlier in the conversation, the argument can be omitted.
 
+## Customization
+
+**Reviewer profile**: Copy `gh-review-pr/reviewer-profile-example.md` to `~/.claude/skills/gh-review-pr/reviewer-profile.md` and edit to match your review style. The profile controls tone, focus areas, and signature moves. Both `gh-review-pr` and `gh-review-cross-pr` use it.
+
+**Review footer**: Create `~/.claude/skills/gh-review-pr/reviewer-footer.md` to append a footer to every review. Supports `{{model}}` placeholder (replaced with the current model name at submission time).
+
 ## Requirements
 
 - [Claude Code](https://claude.ai/code)
