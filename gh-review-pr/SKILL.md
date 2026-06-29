@@ -41,6 +41,8 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
    - **Praise**: only for extraordinary work — a clever solution, an unusually clean abstraction, or something that teaches the reviewer. Skip for code that's merely correct.
 
    Every finding: one line, cite `file_path:line_number`, state the issue. No restating the code. Skip empty sections entirely.
+
+   If the changes introduce complex flow, new abstractions, or non-obvious component interactions, suggest the user run `/explain-code` on the key areas for a visual diagram.
 4. **Walk through each comment** with the user before posting. For each finding:
    - Show the proposed comment text
    - Let the user approve, edit, or drop it

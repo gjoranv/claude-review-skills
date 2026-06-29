@@ -8,7 +8,7 @@ AI coding tools make writing code faster, but the review cycle stays human-speed
 
 ## The solution
 
-Four skills handle the review cycle:
+Five skills handle the review cycle:
 
 | Skill | What it does |
 |---|---|
@@ -16,6 +16,7 @@ Four skills handle the review cycle:
 | `/gh-review-respond` | Reads unresolved review comments, categorizes them (fix / discuss / disagree), applies fixes, replies, resolves threads, and commits |
 | `/gh-review-cross-pr` | Reviews multiple related PRs across repos for consistency: naming, data contracts, deployment ordering, missing changes |
 | `/gh-respond-cross-pr` | Handles review comments across related PRs as a set, with bot noise detection for cross-PR false positives |
+| `/explain-code` | Explains code with visual Mermaid diagrams, analogies, and step-by-step walkthroughs. Suggested by review skills for complex changes |
 
 All skills accept an optional `--context` argument (a GitHub issue URL) to evaluate changes against the overall goal. All keep the developer in control: you confirm what to post, what to fix, and what to push back on.
 
@@ -24,14 +25,14 @@ All skills accept an optional `--context` argument (a GitHub issue URL) to evalu
 Copy the skill directories into your Claude Code skills folder:
 
 ```bash
-cp -r gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr ~/.claude/skills/
+cp -r gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code ~/.claude/skills/
 ```
 
 Or clone this repo and symlink:
 
 ```bash
 git clone https://github.com/gjoranv/claude-review-skills ~/git/claude-review-skills
-for skill in gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr; do
+for skill in gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code; do
   ln -s ~/git/claude-review-skills/$skill ~/.claude/skills/$skill
 done
 ```
