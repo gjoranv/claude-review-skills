@@ -9,7 +9,7 @@ Focus the explanation on the specific function/class/module asked about — don'
 When explaining code, always include:
 
 1. **Start with an analogy**: Compare the code to something from everyday life
-2. **Draw a diagram**: Use Mermaid to show the flow, structure, or relationships. Pick the right type: `sequenceDiagram` for temporal flow, `flowchart` with `subgraph` + `classDef` for static structure. Render to PNG with `mmdc -i diagram.mmd -o diagram.png` and show the result.
+2. **Draw a diagram**: Use Mermaid to show the flow, structure, or relationships. 
 3. **Walk through the code**: Explain step-by-step what happens
 4. **Highlight a gotcha**: What's a common mistake or misconception?
 
