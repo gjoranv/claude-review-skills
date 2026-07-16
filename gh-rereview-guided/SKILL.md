@@ -92,3 +92,9 @@ After the last point:
 - **If the current user is the PR author, do NOT post** — walk through the points and converse only; skip submission and thread resolution.
 - **Never approve or request changes without the user's explicit confirmation.**
 - Always submit via the two-step pending-review pattern; never post individual comments.
+
+## Language
+
+- **Default to pt-BR.** This skill is run in Portuguese by default, so pt-BR is the zero-friction default when no language is specified.
+- **Override** via the `--lang <code>` argument (e.g. `--lang en`) or a free-text request in conversation ("in English", "faz em inglês"). A free-text request takes precedence over the argument if they conflict.
+- The chosen language applies to **everything the user reads and everything posted**: the plain-language restatements, examples/analogies, the summary table, and the review body submitted to GitHub. Code, identifiers, and commit hashes stay as-is.
