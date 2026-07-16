@@ -34,3 +34,25 @@ $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. An optional `--la
    - Each inline review comment.
 
    Merge duplicates (an inline comment and a body bullet describing the same issue are one point). Keep this decomposition **prose-guided, not a rigid parser** — review bodies vary in format, so read for intent rather than matching a fixed structure. Order points by importance (must-fix first), and present the ordered list before starting the walkthrough so the user knows what's coming.
+
+## 2. Walk through the points — one at a time
+
+This is the heart of the skill and the **inverse** of `/gh-review-pr`: do NOT present all points at once. Take **one point at a time**, and stop for the user's confirmation before advancing. For each point, in order:
+
+1. **Restate the finding in plain (layman) language.** Say what the first review objected to, without assuming the reader remembers the original wording or the code. Avoid jargon; if a term is unavoidable, define it in a phrase.
+2. **Give a concrete example or analogy** when it aids understanding — a tiny input/output, a "this is like…" comparison, or the specific line that was wrong. Skip if the point is already self-evident; don't pad.
+3. **Show the current status, citing the commit.** State what the author changed since the first review and point to the commit (`abc1234`) or file+line where it changed. Distinguish what the author *claims* (from their reply) from what you *observed* in the diff.
+4. **Verify — don't restate.** Read the changed code as it stands now; do not trust the author's "fixed it" reply or a single code read alone. When a claim is **empirically checkable, actually check it**:
+   - Migrations / ordering / schema: apply the migrations to a **throwaway** database (e.g. a temp SQLite file) and inspect the result, rather than reasoning about the SQL by eye.
+   - A cited test: run that specific test and report the outcome.
+   - Behavior claims: exercise the smallest slice that demonstrates it.
+
+   Prefer **engine-independent evidence**, and **state honestly what the check does and does not prove** (e.g. "this confirms ordering on SQLite; the production engine is Postgres, so it's strong evidence but not identical"). If you cannot verify empirically, say so and fall back to a careful code read — labelled as such.
+5. **Give a verdict + assessment, then STOP.** Assign one of:
+   - **resolved** — the point is fully addressed, backed by the evidence above.
+   - **accepted-as-non-blocking** — not fully fixed, but you're choosing to accept it (a risk you'll tolerate, a follow-up you'll track).
+   - **still-open** — not addressed, or the fix is wrong/incomplete.
+
+   Then **ask whether the user is satisfied before moving to the next point.** Do not advance on your own. If the user wants to dig deeper or adjust, stay on this point (re-verify, gather more evidence) until they're satisfied. Only then move to the next point.
+
+**The confirmation gate is mandatory.** Never batch points, never auto-advance, and never skip ahead to the summary because the remaining points "look fine." One point, one confirmation.
