@@ -56,3 +56,39 @@ This is the heart of the skill and the **inverse** of `/gh-review-pr`: do NOT pr
    Then **ask whether the user is satisfied before moving to the next point.** Do not advance on your own. If the user wants to dig deeper or adjust, stay on this point (re-verify, gather more evidence) until they're satisfied. Only then move to the next point.
 
 **The confirmation gate is mandatory.** Never batch points, never auto-advance, and never skip ahead to the summary because the remaining points "look fine." One point, one confirmation.
+
+## 3. Close and submit
+
+After the last point:
+
+1. **Summary table** of every point → its verdict, so the whole second pass is visible at a glance:
+
+   | # | Point | Verdict | Evidence |
+   |---|---|---|---|
+   | 1 | Case-fold on lookup | resolved | commit `abc1234`, migration applied to throwaway DB |
+   | 2 | N+1 on the list endpoint | accepted-as-non-blocking | tracked as follow-up issue |
+
+2. **Recommend the new review action.** Default to **`approve`** when every must-fix point is *resolved* (accepted-as-non-blocking risks and tracked follow-ups don't block). Recommend `comment` or `request-changes` if any must-fix point is *still-open*. State the recommendation and the reasoning.
+
+3. **Show the proposed review body for editing.** Draft it from the summary (what was checked, what's resolved, what's accepted, what remains) and let the user edit before anything is posted.
+
+4. **Submit only after explicit confirmation**, via the **two-step pending-review pattern** — never post comments individually:
+   1. Create a PENDING review: `POST repos/OWNER/REPO/pulls/NUMBER/reviews` with `commit_id` and any `comments[][]` array.
+   2. Submit it: `POST repos/OWNER/REPO/pulls/NUMBER/reviews/REVIEW_ID/events` with `event` (`APPROVE` / `COMMENT` / `REQUEST_CHANGES`) and `body`.
+
+   Syntax pitfalls: `-f` for strings, `-F` for numbers; single-quote `comments[][]` params; `side=RIGHT` for added/modified lines, `LEFT` for deleted.
+
+5. **Offer to resolve the addressed inline threads.** For points marked *resolved*, offer to resolve their inline review threads in a single batched GraphQL mutation:
+   ```
+   gh api graphql -f query='mutation {
+     t1: resolveReviewThread(input: {threadId: "ID1"}) { thread { isResolved } }
+     t2: resolveReviewThread(input: {threadId: "ID2"}) { thread { isResolved } }
+   }'
+   ```
+   Only inline threads have resolution state. Do this only after the user confirms.
+
+### Guardrails (carried over from `/gh-review-pr`)
+
+- **If the current user is the PR author, do NOT post** — walk through the points and converse only; skip submission and thread resolution.
+- **Never approve or request changes without the user's explicit confirmation.**
+- Always submit via the two-step pending-review pattern; never post individual comments.
