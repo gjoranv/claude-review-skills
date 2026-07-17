@@ -37,3 +37,13 @@ Do this section silently — gather, review, and form findings before narrating 
 5. **Check out locally and verify when checkable.** For non-trivial PRs, `gh pr checkout NUMBER` for full codebase context (warn first if there are uncommitted local changes). When a finding is empirically checkable, actually run the check on the checked-out branch (e.g. `ruff`, `pytest`, or the smallest slice that demonstrates the behavior) rather than reasoning by eye. Prefer engine-independent evidence and note what the check does and does not prove.
 
 6. **Reviewer persona.** Check for `~/.claude/skills/gh-review-pr/reviewer-profile.md`. If it exists, read it and adopt its tone, focus areas, and signature moves throughout the walkthrough and the posted review.
+
+## 2. Show the map
+
+Before the point-by-point walkthrough, present the whole shape **once** so the reviewer sees where it's going:
+
+- **Verdict**: `approve` / `comment` / `request-changes` (a recommendation — confirmed later in section 5, never final here).
+- **One-line summary**: what the PR does.
+- **The ordered list of points** you'll walk through, most important first: must-fix (bugs, security, correctness) → should-fix (design, missing tests, inconsistencies) → nit (style, naming). One line each, citing `file_path:line_number`. Merge duplicates into a single point.
+
+Present this list once and then stop — the walkthrough itself starts in section 4. Do not expand any point into detail here; the map is just the table of contents.
