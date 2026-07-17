@@ -47,3 +47,12 @@ Before the point-by-point walkthrough, present the whole shape **once** so the r
 - **The ordered list of points** you'll walk through, most important first: must-fix (bugs, security, correctness) → should-fix (design, missing tests, inconsistencies) → nit (style, naming). One line each, citing `file_path:line_number`. Merge duplicates into a single point.
 
 Present this list once and then stop — the walkthrough itself starts in section 4. Do not expand any point into detail here; the map is just the table of contents.
+
+## 3. Problem/solution context
+
+Before point 1, ground the reviewer in what the PR is even about — in plain (layman) language, no assumption that they've read the diff:
+
+- **The problem** the PR sets out to solve: what was wrong, missing, or painful before it.
+- **The solution** it chose: the approach the author took, and any notable alternative they *didn't* take.
+
+Reach for an analogy when it makes the shape click ("this is like adding a coat-check so you don't carry every bag yourself"); skip it when the change is self-evident. Keep this short — it's the on-ramp to the first point, not a second review. This block is **mandatory**: always set the context before the walkthrough begins.
