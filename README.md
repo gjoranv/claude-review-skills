@@ -8,11 +8,12 @@ AI coding tools make writing code faster, but the review cycle stays human-speed
 
 ## The solution
 
-Six skills handle the review cycle:
+Seven skills handle the review cycle:
 
 | Skill | What it does |
 |---|---|
 | `/gh-review-pr` | Reviews a PR with full codebase context, searches for prior art across the repo and org, presents findings grouped by severity, and submits a batched review |
+| `/gh-review-guided` | First-pass guided review — produces the findings, then walks you through them one at a time in plain language with examples (problem/solution context first), verifying each against the code and confirming you're satisfied before it posts |
 | `/gh-rereview-guided` | Guided second-pass review of a PR you already reviewed — walks through the first review's points one at a time, in plain language with examples, verifying each against the current code before you change your verdict |
 | `/gh-review-respond` | Reads unresolved review comments, categorizes them (fix / discuss / disagree), applies fixes, replies, resolves threads, and commits |
 | `/gh-review-cross-pr` | Reviews multiple related PRs across repos for consistency: naming, data contracts, deployment ordering, missing changes |
@@ -26,7 +27,7 @@ All skills accept an optional `--context` argument (a GitHub issue URL) to evalu
 Copy the skill directories into your Claude Code skills folder:
 
 ```bash
-cp -r gh-review-pr gh-rereview-guided gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code ~/.claude/skills/
+cp -r gh-review-pr gh-review-guided gh-rereview-guided gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code ~/.claude/skills/
 ```
 
 Or clone and symlink (recommended — picks up new skills on `git pull`):
@@ -43,6 +44,8 @@ done
 ```
 /gh-review-pr owner/repo#42                    # Review someone else's PR
 /gh-review-pr owner/repo#42 --context org/planning#8  # Review with context
+/gh-review-guided owner/repo#42                # First-pass review, then a guided point-by-point walkthrough
+/gh-review-guided owner/repo#42 --lang en      # ...with narration in English (default is pt-BR)
 /gh-rereview-guided owner/repo#42              # Guided second pass after the author pushed fixes
 /gh-rereview-guided owner/repo#42 --lang en    # ...with narration in English (default is pt-BR)
 /gh-review-respond owner/repo#42               # Handle review feedback on your PR
