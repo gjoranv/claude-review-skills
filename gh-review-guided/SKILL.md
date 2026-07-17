@@ -56,3 +56,24 @@ Before point 1, ground the reviewer in what the PR is even about — in plain (l
 - **The solution** it chose: the approach the author took, and any notable alternative they *didn't* take.
 
 Reach for an analogy when it makes the shape click ("this is like adding a coat-check so you don't carry every bag yourself"); skip it when the change is self-evident. Keep this short — it's the on-ramp to the first point, not a second review. This block is **mandatory**: always set the context before the walkthrough begins.
+
+## 4. Guided walkthrough — one point at a time
+
+This is the heart of the skill. Do NOT present all points at once (that's `/gh-review-pr`; you already showed the *map* in section 2). Take **one point at a time**, in the order from the map, and stop for the user's confirmation before advancing. For each point:
+
+1. **Restate the finding in plain (layman) language.** Say what the concern is without assuming the reader remembers the code or the map wording. Avoid jargon; if a term is unavoidable, define it in a phrase.
+2. **Give a concrete example or analogy** when it aids understanding — a tiny input/output, a "this is like…" comparison, or the specific line at issue. Skip if the point is already self-evident; don't pad.
+3. **Show the current status, citing file/line.** Point to the `file_path:line_number` the finding is about and show what the code does there now.
+4. **Verify — don't restate.** Read the code as it stands; when the finding is empirically checkable, **actually check it** (run the specific test, `ruff`/`pytest`, or the smallest slice that demonstrates the behavior) rather than reasoning by eye. Prefer engine-independent evidence, and **state honestly what the check does and does not prove** (e.g. "this confirms it on SQLite; production is Postgres, so it's strong evidence, not identical"). If you can't verify empirically, say so and fall back to a careful code read — labelled as such.
+5. **Decide: inline comment or chat-only.** Assign each point one disposition:
+   - **inline comment** — worth posting on the PR at its `file_path:line_number`.
+   - **chat-only** — design discussion, a non-blocking risk, or a trivial nit the linter already enforces: talk it through but don't post it.
+6. **Confirmation gate (mandatory).** Ask whether the user is satisfied before moving to the next point. Do NOT auto-advance. If they want to dig deeper or adjust the disposition, stay on this point (re-verify, gather more evidence) until they're satisfied. Only then move on.
+
+**Never batch points, never auto-advance, and never skip ahead to the summary because the remaining points "look fine."** One point, one confirmation.
+
+### Language
+
+- **Default to pt-BR.** This skill is run in Portuguese by default, so pt-BR is the zero-friction default when no language is specified.
+- **Override** via the `--lang <code>` argument (e.g. `--lang en`) or a free-text request in conversation ("in English", "faz em inglês"). A free-text request takes precedence over the argument if they conflict.
+- The chosen language applies to **everything the user reads and everything posted**: the map, the problem/solution context, the plain-language restatements, examples/analogies, the summary table, and the review body submitted to GitHub. Code, identifiers, and commit hashes stay verbatim.
