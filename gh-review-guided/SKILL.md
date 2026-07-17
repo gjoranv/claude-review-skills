@@ -77,3 +77,33 @@ This is the heart of the skill. Do NOT present all points at once (that's `/gh-r
 - **Default to pt-BR.** This skill is run in Portuguese by default, so pt-BR is the zero-friction default when no language is specified.
 - **Override** via the `--lang <code>` argument (e.g. `--lang en`) or a free-text request in conversation ("in English", "faz em inglês"). A free-text request takes precedence over the argument if they conflict.
 - The chosen language applies to **everything the user reads and everything posted**: the map, the problem/solution context, the plain-language restatements, examples/analogies, the summary table, and the review body submitted to GitHub. Code, identifiers, and commit hashes stay verbatim.
+
+## 5. Close and post
+
+After the last point:
+
+1. **Summary table** of every point → its disposition and verdict, so the whole pass is visible at a glance:
+
+   | # | Point | Disposition | Verdict |
+   |---|---|---|---|
+   | 1 | Missing null check on `user.email` | inline comment | must-fix |
+   | 2 | Prefer a record over the DTO class | chat-only | nit |
+
+2. **Assemble comments and body.** Draft the inline comments for **only** the points flagged *inline comment* (each at its `file_path:line_number`), and the review body (the summary that accompanies the review). Let the user edit both before anything is posted.
+
+3. **Footer.** Check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model name powering this session (e.g. "Claude Opus 4.6").
+
+4. **Confirm the action.** State the recommended review action (`approve` / `comment` / `request-changes`) and the reasoning. **Never `approve` or `request-changes` without the user's explicit confirmation.** (If you are the PR author — the section 1 guardrail — stop here: do not post.)
+
+5. **Submit via the two-step pending-review pattern** — never post comments individually:
+   1. Create a PENDING review: `POST repos/OWNER/REPO/pulls/NUMBER/reviews` with `commit_id` and the `comments[][]` array.
+   2. Submit it: `POST repos/OWNER/REPO/pulls/NUMBER/reviews/REVIEW_ID/events` with `event` (`APPROVE` / `COMMENT` / `REQUEST_CHANGES`) and `body`.
+
+   Syntax pitfalls: `-f` for strings, `-F` for numbers; single-quote `comments[][]` params; `side=RIGHT` for added/modified lines, `LEFT` for deleted; for code suggestions, triple backticks with `suggestion` in the comment body.
+
+### Guardrails
+
+- **If the current user is the PR author, do NOT post** — walk through the points and converse only; skip submission.
+- **Never approve or request changes without the user's explicit confirmation.**
+- Always submit via the two-step pending-review pattern; never post individual comments.
+- Apply `reviewer-profile.md` / `reviewer-footer.md` if present, exactly as `/gh-review-pr` does.
