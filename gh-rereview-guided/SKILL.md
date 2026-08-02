@@ -35,6 +35,19 @@ $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. An optional `--la
 
    Merge duplicates (an inline comment and a body bullet describing the same issue are one point). Keep this decomposition **prose-guided, not a rigid parser** — review bodies vary in format, so read for intent rather than matching a fixed structure. Order points by importance (must-fix first), and present the ordered list before starting the walkthrough so the user knows what's coming.
 
+## 1b. Short reorientation (before the walkthrough)
+
+After the ordered list and **before** section 2, deliver a **short refresh** of problem + solution — not a second lecture. Depth: about 6–10 lines total.
+
+- A few sentences: the problem the PR solves + the chosen solution.
+- **One example only if** the domain is opaque; otherwise skip.
+- One line on the delta since the reviewed `commit_id` (e.g. `commit_id` → HEAD, and whether author replies are present).
+- Sources: PR body + first-review body (already gathered); pull the linked issue only if the refresh is still opaque.
+- **Do not** copy the full first-pass briefing from `/gh-review-guided` (no alternatives dump, no “what the phase doesn’t do” essay, no extra domain confirmation gate — point gates in section 2 remain).
+- If the user asks for deeper domain context, expand then — **do not auto-expand**.
+
+This refresh is **mandatory**: always re-anchor the *why* before verifying points. Then proceed to section 2.
+
 ## 2. Walk through the points — one at a time
 
 This is the heart of the skill and the **inverse** of `/gh-review-pr`: do NOT present all points at once. Take **one point at a time**, and stop for the user's confirmation before advancing. For each point, in order:
