@@ -20,7 +20,7 @@ Do this section silently — gather, review, and form findings before narrating 
 
 1. **Resolve the PR and parse arguments.** Take the PR from the first argument (PR URL or `owner/repo#number`); if none is given, use the current branch's open PR (`gh pr view --json number,url,author`). Record `OWNER`, `REPO`, `NUMBER`, and the author's login. Pull `--context <issue>` and `--lang <code>` out of the arguments if present.
 
-2. **Gather the material.** Fetch the PR description, commits, full diff, and author (`gh pr view NUMBER --json title,body,commits,author`; `gh pr diff NUMBER`). Read any linked issue(s) and the `--context` issue for intent — use them to judge whether the PR actually achieves its goal.
+2. **Gather the material.** Fetch the PR description, commits, full diff, and author (`gh pr view NUMBER --json title,body,commits,author`; `gh pr diff NUMBER`). Read any linked issue(s), the `--context` issue, and any issue design comments for intent — use them both to judge whether the PR actually achieves its goal **and** as feedstock for the problem/solution briefing in section 3 (not only for goal judgment).
 
 3. **Author guardrail.** Get your login (`gh api user --jq .login`). **If you are the PR author, do NOT post** — run the walkthrough and converse only; skip the posting in section 5.
 
@@ -50,12 +50,28 @@ Present this list once and then stop — the walkthrough itself starts in sectio
 
 ## 3. Problem/solution context
 
-Before point 1, ground the reviewer in what the PR is even about — in plain (layman) language, no assumption that they've read the diff:
+Before point 1, ground the reviewer in what the PR is even about — in plain (layman) language, no assumption that they've read the diff. This block is a **full didactic briefing**, not a thin one-paragraph on-ramp. It is **mandatory**: always deliver it before the walkthrough begins, and do **not** list review findings here.
 
-- **The problem** the PR sets out to solve: what was wrong, missing, or painful before it.
-- **The solution** it chose: the approach the author took, and any notable alternative they *didn't* take.
+### The problem
 
-Reach for an analogy when it makes the shape click ("this is like adding a coat-check so you don't carry every bag yourself"); skip it when the change is self-evident. Keep this short — it's the on-ramp to the first point, not a second review. This block is **mandatory**: always set the context before the walkthrough begins.
+- What was wrong / missing / painful (current behavior before this PR).
+- Who feels it and why it matters (scale/risk when the issue/PR gives it).
+- **At least one concrete example** — a scenario with names/data from the issue, or a clear fiction that makes the pain vivid.
+- A short table only when two or more distinct behaviors matter (e.g. events vs titles).
+
+### The solution
+
+- Main pieces of the approach (2–4), each with a one-line *why*.
+- Example of the happy path; when relevant, the edge/race the design protects.
+- Rejected alternatives the PR/issue names; what the PR **deliberately does not** do (later phases / follow-ups).
+
+### Tone / depth / gate
+
+- Analogy OK when it makes the shape click ("this is like adding a coat-check so you don't carry every bag yourself"); skip it when self-evident.
+- **Proportional depth**: trivial PR = two short blocks *with* an example; domain/multi-phase PR = full briefing depth above. Do not collapse back to one thin paragraph each.
+- After the briefing, **ask whether the context is enough before starting point 1.** Do not auto-advance into the walkthrough. If the user wants more domain detail, expand then; only proceed to section 4 when they confirm.
+
+Language for this block follows section 4 (default pt-BR / `--lang` override) — unchanged.
 
 ## 4. Guided walkthrough — one point at a time
 
