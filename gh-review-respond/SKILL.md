@@ -1,11 +1,13 @@
 ---
 name: gh-review-respond
 description: Read review comments on a GitHub PR, respond to them, fix code issues, and resolve conversations. Use when the user asks to "handle PR review comments", "fix review feedback", or "respond to PR reviews".
-argument-hint: "[PR-url] [context-issue]"
+argument-hint: "[PR-url] [context-issue] [--auto]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
-Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. Second argument (if present) is context: a GitHub plan issue, WP URL, or Jira key (with or without `--context` prefix). If no PR is given, use the PR referenced earlier in this conversation. If context is provided, use it to better judge whether reviewer comments are relevant to the overall goal.
+Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or `owner/repo#number`. Second argument (if present) is context: a GitHub plan issue or Jira key (with or without `--context` prefix). If no PR is given, use the PR referenced earlier in this conversation. If context is provided, use it to better judge whether reviewer comments are relevant to the overall goal.
+
+**`--auto`**: skip the confirmation checkpoint at step 4 and proceed directly to fixing, committing, and replying. Without this flag, the checkpoint is mandatory.
 
 1. **Read all comments** on the PR from all three sources. Each has different resolution semantics — do NOT skip any source:
    - **Inline review comments**: `gh api repos/OWNER/REPO/pulls/NUMBER/comments` (comments on specific lines of code). Filter out threads marked resolved via GraphQL (`isResolved: true`).
@@ -20,7 +22,9 @@ Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or
    - **Fix needed**: The reviewer pointed out a real issue — propose a code fix.
    - **Discussion**: The reviewer asked a question or raised a point that needs the user's input.
    - **Disagree/Won't fix**: If the user indicates a comment should not be addressed, draft a reply that acknowledges the reviewer's concern, explains the reasoning for the current approach, and offers to revisit if the reviewer feels strongly. Avoid dismissive language.
-4. **Ask the user** to confirm which comments to fix, which to discuss, and which to decline.
+
+   Prior instructions about how to handle an expected comment (e.g. "decline the pin-to-SHA suggestion") determine the proposed categorization, not permission to skip confirmation. The user must see the actual comments before replies are posted.
+4. **Confirmation checkpoint** (skip only if `--auto` was passed): After presenting the summary and proposed categorizations, STOP and end your turn. Do not reply, resolve, commit, or push in the same turn as the summary. Wait for the user to confirm which comments to fix, discuss, and decline.
 5. **Apply fixes** for all confirmed items. Most fixes are local code changes, but some may require doc updates, test additions, or config changes. If a fix requires changes in a different repo, note it for the user rather than attempting it.
 6. **Stage and commit** the fixes:
    - If the PR is already approved, STOP and ask the user before committing. New commits invalidate the approval and require re-review.

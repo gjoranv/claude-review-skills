@@ -14,6 +14,7 @@ Think as a software architect first: before looking at individual lines, evaluat
 Then check for:
 - **Bugs**: Logic errors, off-by-one, null/undefined handling, race conditions
 - **Security**: Injection, hardcoded secrets, missing input validation
+- **Leaked references**: For PRs to public/OSS repos, flag any internal issue tracker references or internal URLs in the diff, commit messages, or PR description
 - **Design**: Does the approach make sense? Are there simpler alternatives? Flag unnecessary abstraction or indirection.
 - **Consistency**: Does it follow existing patterns and conventions in the codebase?
 - **Language conventions**: For Java code, check the JDK version in pom.xml (including parent poms) and verify the code uses modern idioms for that version (e.g. records, sealed classes, pattern matching, text blocks, switch expressions).
@@ -50,7 +51,7 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
 
    After all inline comments are reviewed, show the proposed **review body** (the summary that accompanies the review action). Let the user edit it too. Then confirm the action (approve/comment/request-changes) and submit.
 
-   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model name powering this session (e.g. "Claude Opus 4.6").
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol").
 
    Submit via the two-step pending review pattern. Never post comments individually. (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
 
@@ -61,6 +62,7 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
 - **Re-review**: If you have already submitted a review on this PR, focus on changes since the last review. Check which previous comments were addressed. Only review new or changed code in detail.
 - **Local checkout**: For non-trivial changes, run `gh pr checkout <NUMBER>` for full codebase context. Warn the user first if there are uncommitted local changes.
 - **Prior art**: Search the repo (and org if relevant) for similar patterns. Note whether the PR should follow existing patterns or vice versa.
+- **External prior art**: For changes touching security boundaries, cryptography, concurrency, or novel infrastructure patterns, web-search for how similar problems have been solved or have failed elsewhere. Report relevant findings (known pitfalls, established patterns, CVEs) as part of the review.
 
 Rules:
 - Be constructive and respectful in all comments.

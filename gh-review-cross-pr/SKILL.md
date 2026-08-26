@@ -44,7 +44,7 @@ Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-pr
 
    After all comments are reviewed, show the proposed **review body** for each PR. Let the user edit them. Then confirm the action per PR (approve/comment/request-changes) and submit.
 
-   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to each review body, separated by `---`. Replace `{{model}}` with the model name powering this session (e.g. "Claude Opus 4.6").
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to each review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol").
 
 Rules:
 - Be constructive and respectful in all comments.
