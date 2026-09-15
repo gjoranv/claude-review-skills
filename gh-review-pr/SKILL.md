@@ -19,7 +19,7 @@ Then check for:
 - **Consistency**: Does it follow existing patterns and conventions in the codebase?
 - **Language conventions**: For Java code, check the JDK version in pom.xml (including parent poms) and verify the code uses modern idioms for that version (e.g. records, sealed classes, pattern matching, text blocks, switch expressions).
 - **Edge cases**: Are boundary conditions handled?
-- **Tests**: Are changes adequately tested? Are there missing test cases?
+- **Tests**: Are changes adequately tested? Are there missing test cases? Flag setup or assertion blocks duplicated across test methods; they belong in shared helpers or a test-support class so each test shows only what it tests.
 
 ## Reviewer persona
 
