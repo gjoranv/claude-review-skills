@@ -64,7 +64,7 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
 ## Conditional steps (apply when relevant)
 
 - **Re-review**: If you have already submitted a review on this PR, focus on changes since the last review. Check which previous comments were addressed. Only review new or changed code in detail.
-- **Local checkout**: For non-trivial changes, run `gh pr checkout <NUMBER>` for full codebase context. Warn the user first if there are uncommitted local changes.
+- **Local checkout**: For non-trivial changes, read the PR's code in a temporary worktree, never by switching the user's checkout: `git fetch origin pull/<NUMBER>/head` and `git worktree add --detach /tmp/review-<REPO>-<NUMBER> FETCH_HEAD`. This creates no branch and leaves the user's branch and uncommitted changes alone. When the review is done, remove it with `git worktree remove --force /tmp/review-<REPO>-<NUMBER>`, even if the review stopped early.
 - **Prior art**: Search the repo (and org if relevant) for similar patterns. Note whether the PR should follow existing patterns or vice versa.
 - **External prior art**: For changes touching security boundaries, cryptography, concurrency, or novel infrastructure patterns, web-search for how similar problems have been solved or have failed elsewhere. Report relevant findings (known pitfalls, established patterns, CVEs) as part of the review.
 
