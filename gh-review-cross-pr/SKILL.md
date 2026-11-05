@@ -32,7 +32,7 @@ Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-pr
 5. **Review each PR individually** for bugs, security, and design using the same criteria as `gh-review-pr`.
 6. **Present findings** to the user:
    - **Cross-repo issues**: Naming mismatches, contract violations, missing changes, deployment ordering
-   - **Per-PR issues**: Grouped by severity (must fix, should fix, nit). Praise only for extraordinary work; skip for merely correct code.
+   - **Per-PR issues**: Grouped by severity (must fix, should fix, nit), weighed by impact as in `gh-review-pr`. Praise only for extraordinary work; skip for merely correct code.
    - **Manual review recommended**: Flag files with security-sensitive changes (auth, crypto, access control, secrets, data handling) or high-impact logic changes, and tell the user to review the diff themselves.
 
    If the changes introduce complex flow, new abstractions, or non-obvious component interactions, suggest the user run `/explain-code` on the key areas for a visual diagram.

@@ -41,6 +41,8 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
    - **Manual review**: files the user should review themselves (security-sensitive: auth/crypto/access control/secrets; or high-impact logic)
    - **Praise**: only for extraordinary work — a clever solution, an unusually clean abstraction, or something that teaches the reviewer. Skip for code that's merely correct.
 
+   Choose each finding's section by its impact, not its category. Set the cost against the scale of what it affects: how often the code runs, how long the operation already takes, how many users or how much data it touches, and how hard the damage is to undo. A 10-second delay in a job that already takes hours is minor; the same delay on every request is serious. State that scale in the finding so the reader can check the weighting.
+
    Every finding: one line, cite `file_path:line_number`, state the issue. No restating the code. Skip empty sections entirely.
 
    If the changes introduce complex flow, new abstractions, or non-obvious component interactions, suggest the user run `/explain-code` on the key areas for a visual diagram.
