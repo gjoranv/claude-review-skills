@@ -27,11 +27,17 @@ Handle review comments on a GitHub PR. $ARGUMENTS: first argument is a PR URL or
 4. **Confirmation checkpoint** (skip only if `--auto` was passed): After presenting the summary and proposed categorizations, STOP and end your turn. Do not reply, resolve, commit, or push in the same turn as the summary. Wait for the user to confirm which comments to fix, discuss, and decline.
 5. **Apply fixes** for all confirmed items. Most fixes are local code changes, but some may require doc updates, test additions, or config changes. If a fix requires changes in a different repo, note it for the user rather than attempting it.
 6. **Stage and commit** the fixes:
-   - If the PR is already approved, STOP and ask the user before committing. New commits invalidate the approval and require re-review.
+   - If the PR already has a human approval, record the IDs of its current
+     `APPROVED` reviews and tell the user their states will be rechecked after
+     the push. STOP and ask the user before committing.
    - **Bot reviewers** (e.g., Copilot): squash fixes into existing commits using `git commit --fixup` and `git rebase --autosquash`.
    - **Human reviewers**: ALWAYS create a NEW commit. NEVER squash, amend, fixup, or rebase for human reviews. The reviewer needs to see what changed.
 7. **Confirm with the user** before taking any externally-visible action. Show the commit summary and ask permission to push, reply to comments, and resolve conversations. If declined, stop.
-8. **Push** the branch: `git push`. Do this BEFORE replying so the reviewer sees the updated code when they re-visit the conversations.
+8. **Push** the branch: `git push`. Do this BEFORE replying so the reviewer sees
+   the updated code when they re-visit the conversations. When the push follows
+   a human approval recorded in step 6, re-read the PR's review records and
+   report each recorded review's current state. Do not infer that a new commit
+   retains or dismisses approval from another repository's behavior.
 9. **Reply to each comment**. The API differs by source:
 
    **Inline review comments** (reply into the existing thread):
