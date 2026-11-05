@@ -44,7 +44,7 @@ Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-pr
 
    After all comments are reviewed, show the proposed **review body** for each PR. Let the user edit them. Then confirm the action per PR (approve/comment/request-changes) and submit.
 
-   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to each review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol").
+   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to each review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol"). Never guess the model. In Claude Code, take it from the system prompt. In Codex, look it up with `sqlite3 ~/.codex/state_5.sqlite "SELECT model FROM threads WHERE id = '$CODEX_THREAD_ID'"` and write the result as family, version, and variant (`gpt-6-astra` -> "GPT-6 Astra").
 
 Rules:
 - Be constructive and respectful in all comments.
