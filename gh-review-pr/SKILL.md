@@ -44,16 +44,20 @@ Do all of these in one pass. Do NOT stop for an overview or ask the user to conf
    Every finding: one line, cite `file_path:line_number`, state the issue. No restating the code. Skip empty sections entirely.
 
    If the changes introduce complex flow, new abstractions, or non-obvious component interactions, suggest the user run `/explain-code` on the key areas for a visual diagram.
-4. **Walk through each comment** with the user before posting. For each finding:
-   - Show the proposed comment text
-   - Let the user approve, edit, or drop it
-   - Apply edits before moving on
+4. **Post the inline comments as a pending draft**, right after presenting the findings. A pending review is visible only to the user until it is submitted, so the user edits, drops, or adds comments next to the diff in GitHub. If there are no inline comments, skip the draft: it would show nothing.
+   - GitHub allows one pending review per user per PR. Check first: `gh api repos/OWNER/REPO/pulls/NUMBER/reviews --jq '.[] | select(.state == "PENDING") | .id'`. If one exists, stop and ask the user to submit or discard it.
+   - Create the review via `POST .../pulls/NUMBER/reviews` with `commit_id` and the `comments[][]` array, without `event` (that leaves it PENDING) and without `body`: GitHub's submit dialog does not show a body stored on the draft. Never post comments individually.
+   - Hand over the review body (below), give the user the link `https://github.com/OWNER/REPO/pull/NUMBER/files` and the number of draft comments, and recommend an action (approve / comment / request-changes). Say that they can submit in GitHub by pasting the body, which this session copies to the clipboard on request, or tell this session to submit.
 
-   After all inline comments are reviewed, show the proposed **review body** (the summary that accompanies the review action). Let the user edit it too. Then confirm the action (approve/comment/request-changes) and submit.
+   **Review body**: what the reviewer wants the author to take away beyond the inline comments: the overall verdict in a sentence, and any point that does not belong on a single line. It is written to the author, who knows what the PR does, so never restate the changes, the PR description, or the inline comments. If nothing remains after that, the body is just the footer. **Footer**: check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol"). Write the body to a temp file and show it in a fenced code block, never as a block quote, for reading and editing. Never touch the user's clipboard on your own: offer to copy the body, since pasting from the terminal carries its indentation, line wrapping, and quote markers, and copy it (`pbcopy < <file>` on macOS) only when the user asks. If copying fails, for example in a sandbox, give the file path so the user can copy it themselves. If the user edits the body in the session, update the file.
 
-   **Footer**: Before submitting, check for `~/.claude/skills/gh-review-pr/reviewer-footer.md`. If it exists, append its content to the review body, separated by `---`. Replace `{{model}}` with the model family, version, and variant without extras like context window size (e.g. "Opus 4.8", "GPT-5.6 Sol").
+   **Submitting**: only when the user says so and names the action (e.g. "submit as comment"). Submit with the body from the file and `--arg event <APPROVE|COMMENT|REQUEST_CHANGES>`, building the JSON with `jq -n --rawfile body <file> --arg event ... '{body: $body, event: $event}'` and piping it to `gh api ... --input -`:
+   - With a draft: first check that the pending review still exists, since the user may have submitted or discarded it in GitHub, then post to `repos/OWNER/REPO/pulls/NUMBER/reviews/REVIEW_ID/events`. The user's edits to the draft comments in GitHub are kept.
+   - Without a draft: post to `repos/OWNER/REPO/pulls/NUMBER/reviews`, adding `commit_id` to the JSON.
 
-   Submit via the two-step pending review pattern. Never post comments individually. (1) create PENDING review via `POST .../pulls/NUMBER/reviews` with `commit_id` and `comments[][]` array, (2) submit via `POST .../pulls/NUMBER/reviews/REVIEW_ID/events` with `event` and `body`.
+   Report the review's URL.
+
+   **In-session walkthrough**, only when the user asks for it (e.g. "walk me through the comments"): before creating the draft, show each proposed comment and let the user approve, edit, or drop it, applying edits before moving on. Then show the review body for editing. The draft is still created the same way.
 
    Syntax pitfalls: use `-f` for strings and `-F` for numbers; single-quote `comments[][]` params; use `side=RIGHT` for added/modified lines, `LEFT` for deleted; for code suggestions, triple backticks with `suggestion` in the comment body.
 

@@ -12,7 +12,7 @@ Five skills handle the review cycle:
 
 | Skill | What it does |
 |---|---|
-| `/gh-review-pr` | Reviews a PR with full codebase context, searches for prior art across the repo and org, presents findings grouped by severity, and submits a batched review |
+| `/gh-review-pr` | Reviews a PR with full codebase context, searches for prior art across the repo and org, presents findings grouped by severity, and leaves its inline comments as a pending draft review for you to edit and submit in GitHub |
 | `/gh-review-respond` | Reads unresolved review comments, categorizes them (fix / discuss / disagree), applies fixes, replies, resolves threads, and commits |
 | `/gh-review-cross-pr` | Reviews multiple related PRs across repos for consistency: naming, data contracts, deployment ordering, missing changes |
 | `/gh-respond-cross-pr` | Handles review comments across related PRs as a set, with bot noise detection for cross-PR false positives |
