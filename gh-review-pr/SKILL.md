@@ -29,7 +29,7 @@ Before starting the review, check for `~/.claude/skills/gh-review-pr/reviewer-pr
 
 Do all of these in one pass. Do NOT stop for an overview or ask the user to confirm before reviewing. Review silently and present findings once.
 
-1. **Gather**: Fetch PR description, commits, full diff, and author (`gh pr view --json author`). Read linked issue(s) if any for intent. If the current user is the author, do NOT post comments or reviews — present findings in conversation only, skip steps 3-4.
+1. **Gather**: Fetch PR description, commits, full diff, author, and CI status (`gh pr view --json author,statusCheckRollup`). Read linked issue(s) if any for intent. If the current user is the author, do NOT post comments or reviews — present findings in conversation only, skip steps 3-4. If CI has passed, do not run tests locally.
 2. **Review**: Apply the review criteria above to the full diff. For large PRs (30+ files), prioritize files with the most changes, new files, and critical paths (auth/data/API boundaries); note what was skimmed vs. reviewed in depth.
 3. **Present findings** in one message. No preamble, no "let me first summarize", no confirmation gates. Format:
    - **Verdict**: `approve` / `comment` / `request-changes`
