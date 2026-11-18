@@ -1,6 +1,6 @@
 # claude-review-skills
 
-Custom [Claude Code](https://claude.ai/code) skills for the GitHub PR review cycle.
+Custom skills for the GitHub PR review cycle. Works with Claude Code, Codex, and other agents that support skills.
 
 ## The problem
 
@@ -22,18 +22,22 @@ All skills accept an optional `--context` argument (a GitHub issue URL) to evalu
 
 ## Installation
 
-Copy the skill directories into your Claude Code skills folder:
+Clone and symlink:
 
-```bash
-cp -r gh-review-pr gh-review-respond gh-review-cross-pr gh-respond-cross-pr explain-code ~/.claude/skills/
-```
-
-Or clone and symlink (recommended — picks up new skills on `git pull`):
+### Claude Code
 
 ```bash
 git clone https://github.com/gjoranv/claude-review-skills ~/git/claude-review-skills
 for d in ~/git/claude-review-skills/*/SKILL.md; do
   ln -sfn "$(dirname "$d")" ~/.claude/skills/
+done
+```
+
+### Codex
+
+```bash
+for d in ~/git/claude-review-skills/*/SKILL.md; do
+  ln -sfn "$(dirname "$d")" ~/.codex/skills/
 done
 ```
 
@@ -57,9 +61,10 @@ The skills accept PR URLs or `owner/repo#number`. If a PR was referenced earlier
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code)
+- An agent that supports skills: [Claude Code](https://claude.ai/code), [Codex](https://github.com/openai/codex), or similar
 - [GitHub CLI (`gh`)](https://cli.github.com/) authenticated
 
 ## Related
 
-These skills are described in [I Stopped Reading Diffs. Here's What I Review Instead.](https://gjoranv.hashnode.dev/i-stopped-reading-diffs-here-s-what-i-review-instead)
+- [claude-plan-skills](https://github.com/gjoranv/claude-plan-skills) - skills for GitHub issues as execution plans; its `/prompt-session reviewer` points at `/gh-review-pr`
+- [I Stopped Reading Diffs. Here's What I Review Instead.](https://medium.com/@gjoranv/i-stopped-reading-diffs-heres-what-i-review-instead) - how these skills work and why the review cycle, not the diff, is what to read
